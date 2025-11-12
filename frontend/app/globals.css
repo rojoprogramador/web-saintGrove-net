@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* SaintGrove Brand Colors */
+    --primary-green: #14c681;
+    --primary-blue: #286999;
+    --secondary-blue: #007BFF;
+    --secondary-gray: #3F3F3F;
+    --secondary-light: #F0F0F0;
+  }
+
+  body {
+    @apply font-sans antialiased text-saint-gray bg-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+  }
+}
+
+@layer components {
+  /* Gradient backgrounds */
+  .bg-saint-gradient {
+    background: linear-gradient(135deg, #14c681 0%, #286999 100%);
+  }
+
+  .bg-hero-gradient {
+    background: linear-gradient(135deg, #14c681 0%, #286999 50%, #007BFF 100%);
+  }
+
+  .bg-card-gradient {
+    background: linear-gradient(145deg, rgba(20, 198, 129, 0.1) 0%, rgba(40, 105, 153, 0.1) 100%);
+  }
+
+  /* Text gradients */
+  .text-saint-gradient {
+    @apply bg-saint-gradient bg-clip-text text-transparent;
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+  }
+}

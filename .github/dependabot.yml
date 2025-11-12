@@ -1,0 +1,151 @@
+version: 2
+
+# Configuration for Dependabot automated dependency updates
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+
+updates:
+  # Frontend npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Mexico_City"
+    open-pull-requests-limit: 10
+
+    # PR configuration
+    reviewers:
+      - "SaintGrove-team"  # Update with your GitHub username or team
+    assignees:
+      - "SaintGrove-team"  # Update with your GitHub username
+
+    # Commit message configuration
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+
+    # PR labels
+    labels:
+      - "dependencies"
+      - "automated"
+      - "frontend"
+
+    # Milestone (optional)
+    # milestone: 1
+
+    # Pull request branch name configuration
+    pull-request-branch-name:
+      separator: "/"
+
+    # Rebase strategy
+    rebase-strategy: "auto"
+
+    # Version updates
+    versioning-strategy: "auto"
+
+    # Ignore specific dependencies (if needed)
+    ignore:
+      # Ignore major version updates for React and Next.js
+      # We want to control these updates manually
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+
+    # Group updates
+    groups:
+      # Group React ecosystem updates
+      react:
+        patterns:
+          - "react*"
+          - "@types/react*"
+
+      # Group Next.js ecosystem updates
+      nextjs:
+        patterns:
+          - "next*"
+          - "eslint-config-next"
+
+      # Group testing libraries
+      testing:
+        patterns:
+          - "@testing-library/*"
+          - "@vitest/*"
+          - "vitest"
+          - "@playwright/*"
+          - "playwright"
+
+      # Group TypeScript and types
+      typescript:
+        patterns:
+          - "typescript"
+          - "@types/*"
+
+      # Group linting and formatting
+      linting:
+        patterns:
+          - "eslint*"
+          - "prettier*"
+
+      # Group UI libraries
+      ui:
+        patterns:
+          - "framer-motion"
+          - "lucide-react"
+
+      # Group form libraries
+      forms:
+        patterns:
+          - "react-hook-form"
+          - "@hookform/*"
+          - "zod"
+
+      # Group email related
+      email:
+        patterns:
+          - "resend"
+          - "@react-email/*"
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Mexico_City"
+    open-pull-requests-limit: 5
+
+    # PR configuration
+    reviewers:
+      - "SaintGrove-team"
+    assignees:
+      - "SaintGrove-team"
+
+    # Commit message configuration
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+
+    # PR labels
+    labels:
+      - "dependencies"
+      - "automated"
+      - "github-actions"
+
+    # Rebase strategy
+    rebase-strategy: "auto"
+
+    # Group all GitHub Actions updates together
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+# Security updates are enabled by default and run daily
+# Dependabot will automatically create PRs for security vulnerabilities
+# These cannot be disabled via the configuration file

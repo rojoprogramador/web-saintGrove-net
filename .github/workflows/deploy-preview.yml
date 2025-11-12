@@ -1,0 +1,212 @@
+name: Deploy Preview
+
+on:
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-preview.yml'
+
+# Cancel in-progress runs when a new workflow run is triggered
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20.x'
+  WORKING_DIRECTORY: ./frontend
+
+jobs:
+  # Build preview
+  build-preview:
+    name: Build Preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: npm ci
+
+      - name: Run lint
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: npm run lint
+
+      - name: Run type check
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: npx tsc --noEmit
+
+      - name: Run tests
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: npm run test:coverage
+
+      - name: Build application
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://preview-pr-${{ github.event.pull_request.number }}.saintgrove.net
+          NEXT_TELEMETRY_DISABLED: 1
+
+      - name: Generate build summary
+        run: |
+          echo "# 🚀 Preview Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**PR:** #${{ github.event.pull_request.number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.event.pull_request.head.ref }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.event.pull_request.head.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Build Status" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Lint: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Type Check: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Tests: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Build: Success" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "Once Vercel integration is configured (Phase 5), preview deployments will be automatic." >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-build-${{ github.event.pull_request.number }}
+          path: |
+            frontend/.next/
+            !frontend/.next/cache
+          retention-days: 3
+
+  # Comment on PR with preview info
+  comment-preview:
+    name: Comment Preview Info
+    runs-on: ubuntu-latest
+    needs: build-preview
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Find existing comment
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '🚀 Preview Build'
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            ## 🚀 Preview Build Ready!
+
+            **Build Status:** ✅ Success
+            **Commit:** ${{ github.event.pull_request.head.sha }}
+            **Branch:** `${{ github.event.pull_request.head.ref }}`
+
+            ### ✅ All Checks Passed
+            - ✅ ESLint
+            - ✅ TypeScript
+            - ✅ Unit Tests
+            - ✅ Build
+
+            ### 📦 Build Artifacts
+            Build artifacts are available for 3 days in the [Actions tab](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+
+            ### 🔗 Preview Deployment
+            Preview deployments will be available once Vercel integration is configured in **Phase 5: Production Deployment**.
+
+            **Expected Preview URL:** `https://preview-pr-${{ github.event.pull_request.number }}.saintgrove.net`
+
+            ---
+            <sub>🤖 This comment will be automatically updated on new commits</sub>
+
+  # Size comparison (optional, for bundle analysis)
+  bundle-analysis:
+    name: Bundle Size Analysis
+    runs-on: ubuntu-latest
+    needs: build-preview
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: npm ci
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: preview-build-${{ github.event.pull_request.number }}
+          path: frontend/.next/
+
+      - name: Analyze bundle
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+          echo "# 📦 Bundle Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Get bundle size info
+          if [ -d ".next/static" ]; then
+            TOTAL_SIZE=$(du -sh .next/static | cut -f1)
+            echo "**Total Static Size:** $TOTAL_SIZE" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            # Count JS files
+            JS_COUNT=$(find .next/static -name "*.js" | wc -l)
+            echo "**JavaScript Files:** $JS_COUNT" >> $GITHUB_STEP_SUMMARY
+
+            # Count CSS files
+            CSS_COUNT=$(find .next/static -name "*.css" | wc -l)
+            echo "**CSS Files:** $CSS_COUNT" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            echo "### 💡 Optimization Tips" >> $GITHUB_STEP_SUMMARY
+            echo "- Monitor bundle size to keep initial load fast" >> $GITHUB_STEP_SUMMARY
+            echo "- Use dynamic imports for heavy components" >> $GITHUB_STEP_SUMMARY
+            echo "- Optimize images with next/image" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # Preview build status check
+  preview-status:
+    name: Preview Status
+    runs-on: ubuntu-latest
+    needs: [build-preview, comment-preview, bundle-analysis]
+    if: always()
+
+    steps:
+      - name: Check preview status
+        run: |
+          if [[ "${{ needs.build-preview.result }}" == "success" && \
+                "${{ needs.comment-preview.result }}" == "success" ]]; then
+            echo "✅ Preview deployment successful!"
+            exit 0
+          else
+            echo "❌ Preview deployment failed"
+            exit 1
+          fi
