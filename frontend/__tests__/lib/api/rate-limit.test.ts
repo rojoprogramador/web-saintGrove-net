@@ -135,8 +135,6 @@ describe('rate-limit utilities', () => {
       // Add a recent entry
       checkRateLimit(ip);
 
-      const sizeBefore = getRateLimitStoreSize();
-
       // Clean up
       cleanupRateLimitStore();
 

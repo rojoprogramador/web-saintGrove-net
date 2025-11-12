@@ -160,7 +160,7 @@ describe('ContactForm Component', () => {
 
   it('disables submit button while submitting', async () => {
     global.fetch = vi.fn(() =>
-      new Promise((resolve) =>
+      new Promise<Response>((resolve) =>
         setTimeout(
           () =>
             resolve({

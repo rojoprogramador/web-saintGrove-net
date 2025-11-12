@@ -74,7 +74,6 @@ test.describe('Header Behavior', () => {
     await page.goto('/');
 
     const header = page.locator('header');
-    const headerBox = await header.boundingBox();
 
     // Scroll down
     await page.evaluate(() => window.scrollTo(0, 1000));
