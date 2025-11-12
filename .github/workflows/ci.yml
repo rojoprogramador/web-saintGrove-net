@@ -253,12 +253,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           projectBaseDir: .
-          args: >
-            -Dsonar.organization=saintgrove
-            -Dsonar.projectKey=saintgrove_saintgrove-net
-            -Dsonar.sources=frontend/app,frontend/components,frontend/lib
-            -Dsonar.tests=frontend/__tests__
-            -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info
 
   # Job 7: Security Audit
   security:
