@@ -141,6 +141,7 @@ jobs:
     name: Bundle Size Analysis
     runs-on: ubuntu-latest
     needs: build-preview
+    if: needs.build-preview.result == 'success'
     permissions:
       pull-requests: write
 
@@ -161,11 +162,14 @@ jobs:
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
+        continue-on-error: true
+        id: download
         with:
           name: preview-build-${{ github.event.pull_request.number }}
           path: frontend/.next/
 
       - name: Analyze bundle
+        if: steps.download.outcome == 'success'
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
           echo "# 📦 Bundle Analysis" >> $GITHUB_STEP_SUMMARY
@@ -192,6 +196,13 @@ jobs:
             echo "- Optimize images with next/image" >> $GITHUB_STEP_SUMMARY
           fi
 
+      - name: Artifact not available
+        if: steps.download.outcome != 'success'
+        run: |
+          echo "# 📦 Bundle Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ Build artifacts not available for analysis" >> $GITHUB_STEP_SUMMARY
+
   # Preview build status check
   preview-status:
     name: Preview Status
@@ -202,11 +213,21 @@ jobs:
     steps:
       - name: Check preview status
         run: |
+          echo "## 📊 Preview Status Summary"
+          echo ""
+          echo "**Build Preview:** ${{ needs.build-preview.result }}"
+          echo "**Comment Preview:** ${{ needs.comment-preview.result }}"
+          echo "**Bundle Analysis:** ${{ needs.bundle-analysis.result }}"
+          echo ""
+
+          # Bundle analysis is optional, so we only check build-preview and comment-preview
           if [[ "${{ needs.build-preview.result }}" == "success" && \
                 "${{ needs.comment-preview.result }}" == "success" ]]; then
             echo "✅ Preview deployment successful!"
             exit 0
           else
             echo "❌ Preview deployment failed"
+            echo "  - Build: ${{ needs.build-preview.result }}"
+            echo "  - Comment: ${{ needs.comment-preview.result }}"
             exit 1
           fi
