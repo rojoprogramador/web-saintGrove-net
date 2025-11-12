@@ -182,11 +182,12 @@ jobs:
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: npx playwright install --with-deps chromium
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-output
-          path: frontend/.next/
+      - name: Build Next.js for E2E (fresh build)
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://saintgrove.net
+          NEXT_TELEMETRY_DISABLED: 1
 
       - name: Run Playwright tests
         working-directory: ${{ env.WORKING_DIRECTORY }}
