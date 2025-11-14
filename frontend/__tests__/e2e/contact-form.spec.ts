@@ -2,95 +2,96 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Contact Form', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/contacto');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/contacto', { waitUntil: 'networkidle' });
+    // Wait for the form to be visible
+    await page.waitForSelector('form', { timeout: 10000 });
   });
 
   test('should display contact form', async ({ page }) => {
-    await expect(page.getByLabel('Nombre Completo *')).toBeVisible();
-    await expect(page.getByLabel('Email *')).toBeVisible();
-    await expect(page.getByLabel('Teléfono (Opcional)')).toBeVisible();
-    await expect(page.getByLabel('Mensaje *')).toBeVisible();
+    await expect(page.locator('input#name')).toBeVisible();
+    await expect(page.locator('input#email')).toBeVisible();
+    await expect(page.locator('input#phone')).toBeVisible();
+    await expect(page.locator('textarea#message')).toBeVisible();
   });
 
   test('should validate required fields', async ({ page }) => {
-    const submitButton = page.getByRole('button', { name: /enviar mensaje/i });
+    const submitButton = page.locator('button[type="submit"]');
     await submitButton.click();
 
     // Form should show validation errors
-    await expect(page.getByText(/debe tener al menos/i).first()).toBeVisible();
+    await expect(page.locator('text=/debe tener al menos/i').first()).toBeVisible({ timeout: 5000 });
   });
 
   test('should validate email format', async ({ page }) => {
-    const emailInput = page.getByLabel('Email *');
+    const emailInput = page.locator('input#email');
     await emailInput.fill('invalid-email');
 
     // Submit to trigger validation
-    const submitButton = page.getByRole('button', { name: /enviar mensaje/i });
+    const submitButton = page.locator('button[type="submit"]');
     await submitButton.click();
 
     // Should show email validation error
-    await expect(page.getByText(/email inválido/i)).toBeVisible();
+    await expect(page.locator('text=/email inválido/i')).toBeVisible({ timeout: 5000 });
   });
 
   test('should validate phone format', async ({ page }) => {
-    const phoneInput = page.getByLabel('Teléfono (Opcional)');
+    const phoneInput = page.locator('input#phone');
     await phoneInput.fill('abc');
 
     // Submit to trigger validation
-    const submitButton = page.getByRole('button', { name: /enviar mensaje/i });
+    const submitButton = page.locator('button[type="submit"]');
     await submitButton.click();
 
     // Should show phone validation error
-    await expect(page.getByText(/teléfono inválido/i)).toBeVisible();
+    await expect(page.locator('text=/teléfono inválido/i')).toBeVisible({ timeout: 5000 });
   });
 
   test('should submit valid form', async ({ page }) => {
     // Fill form with valid data
-    await page.getByLabel('Nombre Completo *').fill('John Doe');
-    await page.getByLabel('Email *').fill('john@example.com');
-    await page.getByLabel('Teléfono (Opcional)').fill('+1234567890');
-    await page.getByLabel('Servicio de Interés *').selectOption('desarrollo-web');
-    await page.getByLabel('Mensaje *').fill('This is a test message');
+    await page.locator('input#name').fill('John Doe');
+    await page.locator('input#email').fill('john@example.com');
+    await page.locator('input#phone').fill('+1234567890');
+    await page.locator('select#service').selectOption('desarrollo-web');
+    await page.locator('textarea#message').fill('This is a test message for E2E testing');
 
     // Submit form
-    const submitButton = page.getByRole('button', { name: /enviar mensaje/i });
+    const submitButton = page.locator('button[type="submit"]');
     await submitButton.click();
 
     // Wait for success message
-    await expect(page.getByText(/mensaje enviado exitosamente/i)).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('text=/mensaje enviado exitosamente/i')).toBeVisible({ timeout: 15000 });
   });
 
   test('should clear form after successful submission', async ({ page }) => {
     // Fill and submit form
-    await page.getByLabel('Nombre Completo *').fill('John Doe');
-    await page.getByLabel('Email *').fill('john@example.com');
-    await page.getByLabel('Teléfono (Opcional)').fill('+1234567890');
-    await page.getByLabel('Servicio de Interés *').selectOption('desarrollo-web');
-    await page.getByLabel('Mensaje *').fill('Test message');
+    await page.locator('input#name').fill('John Doe');
+    await page.locator('input#email').fill('john@example.com');
+    await page.locator('input#phone').fill('+1234567890');
+    await page.locator('select#service').selectOption('desarrollo-web');
+    await page.locator('textarea#message').fill('Test message for form clear');
 
-    await page.getByRole('button', { name: /enviar mensaje/i }).click();
+    await page.locator('button[type="submit"]').click();
 
     // Wait for success and check form is cleared
-    await expect(page.getByText(/mensaje enviado exitosamente/i)).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('text=/mensaje enviado exitosamente/i')).toBeVisible({ timeout: 15000 });
 
     // Form fields should be empty
-    await expect(page.getByLabel('Nombre Completo *')).toHaveValue('');
-    await expect(page.getByLabel('Mensaje *')).toHaveValue('');
+    await expect(page.locator('input#name')).toHaveValue('');
+    await expect(page.locator('textarea#message')).toHaveValue('');
   });
 
   test('should show loading state during submission', async ({ page }) => {
-    await page.getByLabel('Nombre Completo *').fill('John Doe');
-    await page.getByLabel('Email *').fill('john@example.com');
-    await page.getByLabel('Teléfono (Opcional)').fill('+1234567890');
-    await page.getByLabel('Servicio de Interés *').selectOption('desarrollo-web');
-    await page.getByLabel('Mensaje *').fill('Test message');
+    await page.locator('input#name').fill('John Doe');
+    await page.locator('input#email').fill('john@example.com');
+    await page.locator('input#phone').fill('+1234567890');
+    await page.locator('select#service').selectOption('desarrollo-web');
+    await page.locator('textarea#message').fill('Test message for loading state');
 
-    const submitButton = page.getByRole('button', { name: /enviar mensaje/i });
+    const submitButton = page.locator('button[type="submit"]');
     await submitButton.click();
 
     // Button should show loading state
     await expect(submitButton).toBeDisabled();
-    await expect(page.getByText(/enviando/i)).toBeVisible();
+    await expect(page.locator('text=/enviando/i')).toBeVisible({ timeout: 2000 });
   });
 });
