@@ -81,7 +81,7 @@ test.describe('Header Behavior', () => {
   test('should show logo in header', async ({ page }) => {
     await page.goto('/');
 
-    const logo = page.getByText(/SaintGrove/i);
+    const logo = page.getByRole('navigation').getByRole('link', { name: /SaintGrove/i });
     await expect(logo).toBeVisible();
   });
 });
