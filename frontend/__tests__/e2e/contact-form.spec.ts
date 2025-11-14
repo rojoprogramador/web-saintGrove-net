@@ -2,89 +2,95 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Contact Form', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-    // Scroll to contact form
-    const contactSection = page.locator('#contacto');
-    await contactSection.scrollIntoViewIfNeeded();
+    await page.goto('/contacto');
+    await page.waitForLoadState('networkidle');
   });
 
   test('should display contact form', async ({ page }) => {
-    await expect(page.getByLabel(/nombre/i)).toBeVisible();
-    await expect(page.getByLabel(/email/i)).toBeVisible();
-    await expect(page.getByLabel(/teléfono/i)).toBeVisible();
-    await expect(page.getByLabel(/mensaje/i)).toBeVisible();
+    await expect(page.getByLabel('Nombre Completo *')).toBeVisible();
+    await expect(page.getByLabel('Email *')).toBeVisible();
+    await expect(page.getByLabel('Teléfono (Opcional)')).toBeVisible();
+    await expect(page.getByLabel('Mensaje *')).toBeVisible();
   });
 
   test('should validate required fields', async ({ page }) => {
-    const submitButton = page.getByRole('button', { name: /enviar/i });
+    const submitButton = page.getByRole('button', { name: /enviar mensaje/i });
     await submitButton.click();
 
     // Form should show validation errors
-    await expect(page.getByText(/requerido/i).first()).toBeVisible();
+    await expect(page.getByText(/debe tener al menos/i).first()).toBeVisible();
   });
 
   test('should validate email format', async ({ page }) => {
-    const emailInput = page.getByLabel(/email/i);
+    const emailInput = page.getByLabel('Email *');
     await emailInput.fill('invalid-email');
-    await emailInput.blur();
+
+    // Submit to trigger validation
+    const submitButton = page.getByRole('button', { name: /enviar mensaje/i });
+    await submitButton.click();
 
     // Should show email validation error
-    await expect(page.getByText(/email.*válido/i)).toBeVisible();
+    await expect(page.getByText(/email inválido/i)).toBeVisible();
   });
 
   test('should validate phone format', async ({ page }) => {
-    const phoneInput = page.getByLabel(/teléfono/i);
-    await phoneInput.fill('abc123');
-    await phoneInput.blur();
+    const phoneInput = page.getByLabel('Teléfono (Opcional)');
+    await phoneInput.fill('abc');
+
+    // Submit to trigger validation
+    const submitButton = page.getByRole('button', { name: /enviar mensaje/i });
+    await submitButton.click();
 
     // Should show phone validation error
-    await expect(page.getByText(/teléfono.*válido/i)).toBeVisible();
+    await expect(page.getByText(/teléfono inválido/i)).toBeVisible();
   });
 
   test('should submit valid form', async ({ page }) => {
     // Fill form with valid data
-    await page.getByLabel(/nombre/i).fill('John Doe');
-    await page.getByLabel(/email/i).fill('john@example.com');
-    await page.getByLabel(/teléfono/i).fill('+1234567890');
-    await page.getByLabel(/mensaje/i).fill('This is a test message');
+    await page.getByLabel('Nombre Completo *').fill('John Doe');
+    await page.getByLabel('Email *').fill('john@example.com');
+    await page.getByLabel('Teléfono (Opcional)').fill('+1234567890');
+    await page.getByLabel('Servicio de Interés *').selectOption('desarrollo-web');
+    await page.getByLabel('Mensaje *').fill('This is a test message');
 
     // Submit form
-    const submitButton = page.getByRole('button', { name: /enviar/i });
+    const submitButton = page.getByRole('button', { name: /enviar mensaje/i });
     await submitButton.click();
 
-    // Wait for success message or redirect
-    // Note: Update this based on actual form behavior
-    await expect(page.getByText(/enviado|éxito|recibido/i)).toBeVisible({ timeout: 10000 });
+    // Wait for success message
+    await expect(page.getByText(/mensaje enviado exitosamente/i)).toBeVisible({ timeout: 10000 });
   });
 
   test('should clear form after successful submission', async ({ page }) => {
     // Fill and submit form
-    await page.getByLabel(/nombre/i).fill('John Doe');
-    await page.getByLabel(/email/i).fill('john@example.com');
-    await page.getByLabel(/teléfono/i).fill('+1234567890');
-    await page.getByLabel(/mensaje/i).fill('Test message');
+    await page.getByLabel('Nombre Completo *').fill('John Doe');
+    await page.getByLabel('Email *').fill('john@example.com');
+    await page.getByLabel('Teléfono (Opcional)').fill('+1234567890');
+    await page.getByLabel('Servicio de Interés *').selectOption('desarrollo-web');
+    await page.getByLabel('Mensaje *').fill('Test message');
 
-    await page.getByRole('button', { name: /enviar/i }).click();
+    await page.getByRole('button', { name: /enviar mensaje/i }).click();
 
     // Wait for success and check form is cleared
-    await expect(page.getByText(/enviado|éxito|recibido/i)).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText(/mensaje enviado exitosamente/i)).toBeVisible({ timeout: 10000 });
 
     // Form fields should be empty
-    await expect(page.getByLabel(/nombre/i)).toHaveValue('');
-    await expect(page.getByLabel(/mensaje/i)).toHaveValue('');
+    await expect(page.getByLabel('Nombre Completo *')).toHaveValue('');
+    await expect(page.getByLabel('Mensaje *')).toHaveValue('');
   });
 
   test('should show loading state during submission', async ({ page }) => {
-    await page.getByLabel(/nombre/i).fill('John Doe');
-    await page.getByLabel(/email/i).fill('john@example.com');
-    await page.getByLabel(/teléfono/i).fill('+1234567890');
-    await page.getByLabel(/mensaje/i).fill('Test');
+    await page.getByLabel('Nombre Completo *').fill('John Doe');
+    await page.getByLabel('Email *').fill('john@example.com');
+    await page.getByLabel('Teléfono (Opcional)').fill('+1234567890');
+    await page.getByLabel('Servicio de Interés *').selectOption('desarrollo-web');
+    await page.getByLabel('Mensaje *').fill('Test message');
 
-    const submitButton = page.getByRole('button', { name: /enviar/i });
+    const submitButton = page.getByRole('button', { name: /enviar mensaje/i });
     await submitButton.click();
 
     // Button should show loading state
     await expect(submitButton).toBeDisabled();
-    await expect(page.getByText(/enviando|cargando/i)).toBeVisible();
+    await expect(page.getByText(/enviando/i)).toBeVisible();
   });
 });
