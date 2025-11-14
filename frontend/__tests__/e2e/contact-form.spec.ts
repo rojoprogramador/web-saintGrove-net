@@ -2,9 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Contact Form', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/contacto', { waitUntil: 'networkidle' });
-    // Wait for the form to be visible
-    await page.waitForSelector('form', { timeout: 10000 });
+    await page.goto('/contacto', { waitUntil: 'load' });
+    // Wait for client-side hydration to complete
+    await page.waitForLoadState('networkidle');
+    // Wait for React to hydrate the form
+    await page.waitForSelector('input#name', { state: 'visible', timeout: 30000 });
   });
 
   test('should display contact form', async ({ page }) => {

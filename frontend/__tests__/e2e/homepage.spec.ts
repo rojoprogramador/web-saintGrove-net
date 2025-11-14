@@ -2,7 +2,8 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Homepage', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'load' });
+    await page.waitForLoadState('networkidle');
   });
 
   test('should load successfully', async ({ page }) => {
@@ -46,7 +47,8 @@ test.describe('Homepage - Mobile', () => {
   test.use({ viewport: { width: 375, height: 667 } });
 
   test('should be responsive on mobile', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'load' });
+    await page.waitForLoadState('networkidle');
 
     // Check that page loads on mobile
     const main = page.locator('main');
