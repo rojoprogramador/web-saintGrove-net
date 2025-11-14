@@ -143,6 +143,12 @@ El proyecto incluye security headers configurados en `next.config.ts`:
 # Ejecutar todos los tests
 npm run test:all
 
+# Tests unitarios
+npm run test
+
+# Tests E2E
+npm run test:e2e
+
 # Tests con UI interactiva
 npm run test:ui
 
@@ -150,7 +156,13 @@ npm run test:ui
 npm run test:coverage
 ```
 
-**Coverage actual: 49.82%** (129 tests passing)
+**Test Status**:
+- Unit Tests: 129 passing
+- E2E Tests: 11 passing, 12 skipped (awaiting API configuration)
+- Coverage: 49.82%
+- E2E Execution Time: ~15.8s
+
+**Note**: E2E tests use `domcontentloaded` wait strategy for optimal performance. Some tests are temporarily skipped pending API endpoint configuration. See `specs/setup/testing.md` for details.
 
 ## 🚀 Deployment
 
