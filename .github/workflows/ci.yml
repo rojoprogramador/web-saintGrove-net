@@ -158,7 +158,7 @@ jobs:
   e2e:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     needs: [build]
     # Only run E2E on main branch or PRs to main to save CI minutes
     if: github.ref == 'refs/heads/main' || github.base_ref == 'main'
@@ -279,9 +279,9 @@ jobs:
                 "${{ needs.test.result }}" == "success" && \
                 "${{ needs.build.result }}" == "success" && \
                 "${{ needs.security.result }}" == "success" ]]; then
-            echo "✅ All CI checks passed successfully!"
+            echo "All CI checks passed successfully"
             exit 0
           else
-            echo "❌ Some CI checks failed"
+            echo "Some CI checks failed"
             exit 1
           fi

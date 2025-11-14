@@ -65,17 +65,17 @@ jobs:
 
       - name: Generate build summary
         run: |
-          echo "# 🚀 Preview Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "# Preview Build Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**PR:** #${{ github.event.pull_request.number }}" >> $GITHUB_STEP_SUMMARY
           echo "**Branch:** ${{ github.event.pull_request.head.ref }}" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** ${{ github.event.pull_request.head.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Build Status" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Lint: Passed" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Type Check: Passed" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Tests: Passed" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Build: Success" >> $GITHUB_STEP_SUMMARY
+          echo "- Lint: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- Type Check: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- Tests: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- Build: Success" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Next Steps" >> $GITHUB_STEP_SUMMARY
           echo "Once Vercel integration is configured (Phase 5), preview deployments will be automatic." >> $GITHUB_STEP_SUMMARY
@@ -172,7 +172,7 @@ jobs:
         if: steps.download.outcome == 'success'
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
-          echo "# 📦 Bundle Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "# Bundle Analysis" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           # Get bundle size info
@@ -190,7 +190,7 @@ jobs:
             echo "**CSS Files:** $CSS_COUNT" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
 
-            echo "### 💡 Optimization Tips" >> $GITHUB_STEP_SUMMARY
+            echo "### Optimization Tips" >> $GITHUB_STEP_SUMMARY
             echo "- Monitor bundle size to keep initial load fast" >> $GITHUB_STEP_SUMMARY
             echo "- Use dynamic imports for heavy components" >> $GITHUB_STEP_SUMMARY
             echo "- Optimize images with next/image" >> $GITHUB_STEP_SUMMARY
@@ -199,9 +199,9 @@ jobs:
       - name: Artifact not available
         if: steps.download.outcome != 'success'
         run: |
-          echo "# 📦 Bundle Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "# Bundle Analysis" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️ Build artifacts not available for analysis" >> $GITHUB_STEP_SUMMARY
+          echo "Build artifacts not available for analysis" >> $GITHUB_STEP_SUMMARY
 
   # Preview build status check
   preview-status:
@@ -213,7 +213,7 @@ jobs:
     steps:
       - name: Check preview status
         run: |
-          echo "## 📊 Preview Status Summary"
+          echo "## Preview Status Summary"
           echo ""
           echo "**Build Preview:** ${{ needs.build-preview.result }}"
           echo "**Comment Preview:** ${{ needs.comment-preview.result }}"
@@ -223,10 +223,10 @@ jobs:
           # Bundle analysis is optional, so we only check build-preview and comment-preview
           if [[ "${{ needs.build-preview.result }}" == "success" && \
                 "${{ needs.comment-preview.result }}" == "success" ]]; then
-            echo "✅ Preview deployment successful!"
+            echo "Preview deployment successful"
             exit 0
           else
-            echo "❌ Preview deployment failed"
+            echo "Preview deployment failed"
             echo "  - Build: ${{ needs.build-preview.result }}"
             echo "  - Comment: ${{ needs.comment-preview.result }}"
             exit 1
