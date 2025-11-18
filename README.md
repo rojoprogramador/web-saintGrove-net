@@ -162,33 +162,15 @@ npm run test:coverage
 - Coverage: 49.82%
 - E2E Execution Time: ~15.8s
 
-**Note**: E2E tests use `domcontentloaded` wait strategy for optimal performance. Some tests are temporarily skipped pending API endpoint configuration. See `specs/setup/testing.md` for details.
+**Note**: E2E tests use `domcontentloaded` wait strategy for optimal performance. Some tests are temporarily skipped pending API endpoint configuration.
 
-## 🔄 Dependency Management (Dependabot)
+## 🔄 Dependency Management
 
 El proyecto utiliza **Dependabot** para mantener las dependencias actualizadas automáticamente.
 
-### Estrategia de Actualizaciones
-
-- **PATCH** (1.0.0 → 1.0.1): Auto-merge si CI pasa (security patches)
-- **MINOR** (1.0.0 → 1.1.0): Revisión rápida + merge si CI pasa
-- **MAJOR** (1.0.0 → 2.0.0): Revisión manual exhaustiva + testing
-
-### Frecuencia
-
-- **Dependencias npm**: Lunes 9:00 AM (semanal)
-- **GitHub Actions**: Lunes 9:00 AM (semanal)
-- **Security patches**: Diarios (automático)
-
-### Documentación Completa
-
-- 📚 [Estrategia de Dependabot](specs/maintenance/dependabot-strategy.md)
-- 📋 [PRs Actuales - Guía de Acción](specs/maintenance/CURRENT-DEPENDABOT-PRS.md)
-- ⚙️ [Configuración](.github/dependabot.yml)
-
-### Dependencias Protegidas
-
-React, React-DOM y Next.js **NO** se actualizan automáticamente en versiones MAJOR - requieren revisión manual.
+- **Configuración**: [.github/dependabot.yml](.github/dependabot.yml)
+- **Frecuencia**: Semanal (Lunes 9:00 AM) + Security patches diarios
+- **Estrategia**: PATCH auto-merge, MINOR review rápido, MAJOR review manual
 
 ## 🚀 Deployment
 

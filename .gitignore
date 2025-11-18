@@ -65,3 +65,6 @@ nul
 # OS specific
 Desktop.ini
 $RECYCLE.BIN/
+
+# Documentation (internal only - NOT for public repo)
+specs/
