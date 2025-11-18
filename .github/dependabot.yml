@@ -1,10 +1,20 @@
 version: 2
 
 # Configuration for Dependabot automated dependency updates
-# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+# Official Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+# Project Strategy: specs/maintenance/dependabot-strategy.md
+#
+# STRATEGY SUMMARY:
+# - PATCH (1.0.0→1.0.1): Auto-merge if CI passes (security patches)
+# - MINOR (1.0.0→1.1.0): Quick review + merge if CI passes
+# - MAJOR (1.0.0→2.0.0): Manual review + testing required
+#
+# See full documentation for detailed workflow
 
 updates:
   # Frontend npm dependencies
+  # Frequency: Weekly (Mondays 9 AM Mexico City time)
+  # Security updates: Daily (automatic, cannot be disabled)
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
@@ -12,13 +22,13 @@ updates:
       day: "monday"
       time: "09:00"
       timezone: "America/Mexico_City"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 15  # Increased to handle grouped updates
 
     # PR configuration
     reviewers:
-      - "SaintGrove-team"  # Update with your GitHub username or team
+      - "rojoprogramador"  # Primary reviewer
     assignees:
-      - "SaintGrove-team"  # Update with your GitHub username
+      - "rojoprogramador"
 
     # Commit message configuration
     commit-message:
@@ -111,6 +121,7 @@ updates:
           - "@react-email/*"
 
   # GitHub Actions dependencies
+  # Keep GitHub Actions up to date for security and new features
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -122,9 +133,9 @@ updates:
 
     # PR configuration
     reviewers:
-      - "SaintGrove-team"
+      - "rojoprogramador"
     assignees:
-      - "SaintGrove-team"
+      - "rojoprogramador"
 
     # Commit message configuration
     commit-message:
