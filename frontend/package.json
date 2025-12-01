@@ -23,8 +23,8 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@react-email/components": "^1.0.1",
-    "framer-motion": "^12.23.24",
-    "lucide-react": "^0.554.0",
+    "framer-motion": "^12.23.25",
+    "lucide-react": "^0.555.0",
     "next": "^16.0.1",
     "next-seo": "^7.0.1",
     "react": "^19.2.0",
