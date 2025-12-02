@@ -22,7 +22,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variants = {
     primary: 'bg-saint-gradient text-white hover:opacity-90 focus:ring-saint-green',
-    secondary: 'bg-saint-blue-light text-white hover:bg-opacity-90 focus:ring-saint-blue-light',
+    secondary: 'bg-saint-blue-light text-saint-green hover:bg-opacity-90 focus:ring-saint-blue-light',
     outline: 'border-2 border-saint-green text-saint-green hover:bg-saint-green hover:text-white focus:ring-saint-green',
   };
 

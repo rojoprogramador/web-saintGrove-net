@@ -89,7 +89,7 @@ export const Hero: React.FC = () => {
           </motion.div>
 
           {/* Stats or Trust Indicators (Optional) */}
-          <motion.div
+          {/* <motion.div
             className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -107,7 +107,7 @@ export const Hero: React.FC = () => {
                 <div className="text-gray-600">{stat.label}</div>
               </div>
             ))}
-          </motion.div>
+          </motion.div> */}
         </div>
       </div>
     </section>

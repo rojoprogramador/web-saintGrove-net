@@ -10,25 +10,25 @@ export const Process: React.FC = () => {
       number: 1,
       icon: MessageSquare,
       title: 'Consulta Inicial',
-      description: 'Análisis de necesidades y objetivos de tu proyecto',
+      description: 'Análisis de necesidades y objetivos de tu proyecto.',
     },
     {
       number: 2,
       icon: Pencil,
       title: 'Diseño y Planificación',
-      description: 'Creación de prototipos y wireframes detallados',
+      description: 'Creación de prototipos y wireframes detallados.',
     },
     {
       number: 3,
       icon: Code2,
       title: 'Desarrollo',
-      description: 'Implementación con las últimas tecnologías',
+      description: 'Implementación con las últimas tecnologías.',
     },
     {
       number: 4,
       icon: Rocket,
       title: 'Lanzamiento y Soporte',
-      description: 'Deploy profesional y soporte continuo',
+      description: 'Deploy profesional y soporte continuo.',
     },
   ];
 
@@ -87,10 +87,10 @@ export const Process: React.FC = () => {
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-xl font-bold text-saint-gray mb-3">
+                  <h3 className="text-xl font-bold text-saint-gray mb-3 min-h-[60px]">
                     {step.title}
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-sm min-h-20">
                     {step.description}
                   </p>
                 </div>

@@ -101,56 +101,56 @@ export const servicesData: Service[] = [
       link: '/contacto',
     },
   },
-  {
-    slug: 'branding',
-    name: 'Creación de Marca',
-    shortDescription: 'Identidad visual única que conecta con tu audiencia',
-    fullDescription: 'Construimos marcas memorables que resuenan con tu audiencia. Desde el concepto inicial hasta la implementación completa, creamos identidades visuales coherentes que transmiten los valores de tu empresa.',
-    icon: 'Palette',
-    features: [
-      'Logo y Branding',
-      'Guía de Estilo',
-      'Material Gráfico',
-      'Identidad Digital',
-      'Papelería Corporativa',
-      'Manual de Marca',
-    ],
-    benefits: [
-      'Diferenciación en el mercado',
-      'Mayor reconocimiento de marca',
-      'Coherencia visual en todos los canales',
-      'Conexión emocional con clientes',
-      'Profesionalismo y credibilidad',
-    ],
-    process: [
-      {
-        title: 'Investigación',
-        description: 'Estudiamos tu industria, competencia y audiencia objetivo.',
-      },
-      {
-        title: 'Concepto Creativo',
-        description: 'Desarrollamos conceptos que reflejan la esencia de tu marca.',
-      },
-      {
-        title: 'Diseño y Refinamiento',
-        description: 'Creamos y perfeccionamos todos los elementos visuales.',
-      },
-      {
-        title: 'Entrega de Brand Guide',
-        description: 'Documentamos todo para uso consistente de tu marca.',
-      },
-    ],
-    technologies: ['Adobe Creative Suite', 'Figma', 'Illustrator', 'Photoshop'],
-    pricing: {
-      from: 600,
-      currency: 'USD',
-      period: 'proyecto',
-    },
-    cta: {
-      text: 'Crear Mi Marca',
-      link: '/contacto',
-    },
-  },
+  // {
+  //   slug: 'branding',
+  //   name: 'Creación de Marca',
+  //   shortDescription: 'Identidad visual única que conecta con tu audiencia',
+  //   fullDescription: 'Construimos marcas memorables que resuenan con tu audiencia. Desde el concepto inicial hasta la implementación completa, creamos identidades visuales coherentes que transmiten los valores de tu empresa.',
+  //   icon: 'Palette',
+  //   features: [
+  //     'Logo y Branding',
+  //     'Guía de Estilo',
+  //     'Material Gráfico',
+  //     'Identidad Digital',
+  //     'Papelería Corporativa',
+  //     'Manual de Marca',
+  //   ],
+  //   benefits: [
+  //     'Diferenciación en el mercado',
+  //     'Mayor reconocimiento de marca',
+  //     'Coherencia visual en todos los canales',
+  //     'Conexión emocional con clientes',
+  //     'Profesionalismo y credibilidad',
+  //   ],
+  //   process: [
+  //     {
+  //       title: 'Investigación',
+  //       description: 'Estudiamos tu industria, competencia y audiencia objetivo.',
+  //     },
+  //     {
+  //       title: 'Concepto Creativo',
+  //       description: 'Desarrollamos conceptos que reflejan la esencia de tu marca.',
+  //     },
+  //     {
+  //       title: 'Diseño y Refinamiento',
+  //       description: 'Creamos y perfeccionamos todos los elementos visuales.',
+  //     },
+  //     {
+  //       title: 'Entrega de Brand Guide',
+  //       description: 'Documentamos todo para uso consistente de tu marca.',
+  //     },
+  //   ],
+  //   technologies: ['Adobe Creative Suite', 'Figma', 'Illustrator', 'Photoshop'],
+  //   pricing: {
+  //     from: 600,
+  //     currency: 'USD',
+  //     period: 'proyecto',
+  //   },
+  //   cta: {
+  //     text: 'Crear Mi Marca',
+  //     link: '/contacto',
+  //   },
+  // },
   {
     slug: 'marketing',
     name: 'Campañas Publicitarias',

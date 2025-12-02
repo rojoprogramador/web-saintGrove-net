@@ -29,17 +29,17 @@ export const ServicesGrid: React.FC = () => {
         'Soporte Continuo',
       ],
     },
-    {
-      icon: Palette,
-      title: 'Creación de Marca',
-      description: 'Identidad visual única que conecta con tu audiencia',
-      features: [
-        'Logo y Branding',
-        'Guía de Estilo',
-        'Material Gráfico',
-        'Identidad Digital',
-      ],
-    },
+    // {
+    //   icon: Palette,
+    //   title: 'Creación de Marca',
+    //   description: 'Identidad visual única que conecta con tu audiencia',
+    //   features: [
+    //     'Logo y Branding',
+    //     'Guía de Estilo',
+    //     'Material Gráfico',
+    //     'Identidad Digital',
+    //   ],
+    // },
     {
       icon: TrendingUp,
       title: 'Campañas Publicitarias',

@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from "next/image";
 
 interface LogoProps {
   variant?: 'full' | 'icon' | 'text';
@@ -37,23 +38,19 @@ const IconSvg: React.FC<{ size: 'sm' | 'md' | 'lg' }> = ({ size }) => (
 
 IconSvg.displayName = 'IconSvg';
 
-const TextLogo: React.FC<{ size: 'sm' | 'md' | 'lg' }> = ({ size }) => (
-  <span className={`font-bold text-saint-gradient ${sizes[size].text}`}>
-    SaintGrove
-  </span>
+const TextLogo: React.FC<{ width : number, height : number }> = ({ width, height }) => (
+  <Image src="/Saintgrove.svg" alt="Logotipo" width={width} height={height} />
 );
 
 TextLogo.displayName = 'TextLogo';
 
 export const Logo: React.FC<LogoProps> = ({
   variant = 'full',
-  size = 'md',
   className = '',
 }) => {
   return (
-    <Link href="/" className={`inline-flex items-center gap-2 ${className}`}>
-      {(variant === 'full' || variant === 'icon') && <IconSvg size={size} />}
-      {(variant === 'full' || variant === 'text') && <TextLogo size={size} />}
+    <Link href="/" className={`inline-flex items-center ${className}`}>
+      {(variant === 'full' || variant === 'text') && <TextLogo width={250} height={150} />}
     </Link>
   );
 };

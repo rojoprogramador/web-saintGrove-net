@@ -22,7 +22,7 @@ export const Header: React.FC = () => {
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Logo size="md" />
+          <Logo size="sm" />
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
