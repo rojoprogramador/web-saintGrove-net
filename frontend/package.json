@@ -34,15 +34,15 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@playwright/test": "^1.56.1",
+    "@playwright/test": "^1.57.0",
     "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
+    "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
-    "@vitest/coverage-v8": "^4.0.10",
+    "@vitest/coverage-v8": "^4.0.15",
     "@vitest/ui": "^4.0.8",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.39.1",
